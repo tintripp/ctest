@@ -7,3 +7,4 @@ add_subdirectory(vendor/sdl)
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3-static)
+target_include_directories(${PROJECT_NAME} PRIVATE ${SDL3_INCLUDE_DIRS}) 

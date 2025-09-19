@@ -12,11 +12,13 @@ int main(int argc, char* args[]) {
     }
 
     // Create window and renderer
-    if (SDL_CreateWindowAndRenderer("sigma", 640, 480, SDL_WINDOW_ALWAYS_ON_TOP, &window, &renderer) < 0) {
+    if (SDL_CreateWindowAndRenderer("sigma", 640, 480, SDL_WINDOW_RESIZABLE, &window, &renderer) < 0) {
         SDL_Log("Window and renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         SDL_Quit();
         return 1;
     }
+
+    SDL_RenderPresent(renderer);
 
     // Set window title
     SDL_SetWindowTitle(window, "SDL3 Test Window");
