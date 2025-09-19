@@ -1,29 +1,39 @@
-#include <SDL.h>
-#include <iostream>
+#include <SDL3/SDL.h>
+#include <stdio.h>
 
-int main(int argc, char *argv[]) {
-    SDL_Window *window;
+int main(int argc, char* args[]) {
+    SDL_Window* window = NULL;
+    SDL_Renderer* renderer = NULL;
 
-    SDL_Init(SDL_INIT_VIDEO);
-
-    window = SDL_CreateWindow(
-            "SDL2Test",
-            SDL_WINDOWPOS_UNDEFINED,
-            SDL_WINDOWPOS_UNDEFINED,
-            640,
-            480,
-            SDL_WINDOW_OPENGL
-    );
-
-    if (window == nullptr) {
-        std::cout << "Could not create window" << SDL_GetError() << std::endl;
-        return -1;
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        SDL_Log("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+        return 1;
     }
 
-    SDL_Delay(3000);
+    // Create window and renderer
+    if (SDL_CreateWindowAndRenderer("sigma", 640, 480, SDL_WINDOW_ALWAYS_ON_TOP, &window, &renderer) < 0) {
+        SDL_Log("Window and renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
 
+    // Set window title
+    SDL_SetWindowTitle(window, "SDL3 Test Window");
+
+    SDL_Event e;
+    bool quit = false;
+    while (!quit){
+        while (SDL_PollEvent(&e)){
+            if (e.type == SDL_EVENT_QUIT){
+                quit = true;
+            }
+        }
+    }
+
+    // Clean up
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    return 0;
 }
