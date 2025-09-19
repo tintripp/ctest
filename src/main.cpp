@@ -1,43 +1,29 @@
-#include "iostream"
-#include "string"
+#include <SDL.h>
+#include <iostream>
 
-#include <cstdlib>
-#include <ctime>
+int main(int argc, char *argv[]) {
+    SDL_Window *window;
 
-int main() {
-    std::cout << "Woah this works???" << std::endl << std::endl;
-    std::cout << "Guess a number between one and fifty. " << std::endl << std::endl;
+    SDL_Init(SDL_INIT_VIDEO);
 
-    srand(time(0)); //seed rng
+    window = SDL_CreateWindow(
+            "SDL2Test",
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            640,
+            480,
+            SDL_WINDOW_OPENGL
+    );
 
-    int secret = rand() % 50 + 1;
-    int guessCount = 0;
+    if (window == nullptr) {
+        std::cout << "Could not create window" << SDL_GetError() << std::endl;
+        return -1;
+    }
 
-    int playerGuess;
-    std::string strGuess;
+    SDL_Delay(3000);
 
-    do {
-        std::cout << "Guess my secret number: ";
-        std::getline(std::cin, strGuess);
-
-        try {
-            playerGuess = std::stoi(strGuess);
-        } catch (...) {
-            std::cout << "Could not turn your guess into an integer. Please try again. " << std::endl;
-            continue;
-        }
-
-        if (playerGuess > secret) {
-            std::cout << "Psst! Guess lower!! ";
-        } else if (playerGuess < secret) {
-            std::cout << "Psst! Guess higher!! ";
-        }
-
-        guessCount ++;
-
-    } while (playerGuess != secret);
-
-    std::cout << "You won in " << guessCount << (guessCount == 1 ? " guess!" : " guesses.") << std::endl;
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
     return 0;
 }
