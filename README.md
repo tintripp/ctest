@@ -2,6 +2,7 @@
 ```mkdir build & cd build```
 # build 
 ```cmake .. && cmake --build .```
+<br />
 on windows, you can append ```--config Release``` to hide console
 # run
 ```SDL_VIDEODRIVER=x11 ./ctest```
