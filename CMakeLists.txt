@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.31)
 project(ctest)
 
 set(SDL_STATIC ON)
-add_subdirectory(vendor/sdl)
+add_subdirectory(extern/SDL)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
