@@ -1,1 +1,2 @@
+#!/usr/bin/env sh
 cmake bin && cmake --build bin && SDL_VIDEODRIVER=x11 bin/ctest
