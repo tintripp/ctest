@@ -13,4 +13,8 @@ if (WIN32)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3-static)
-target_include_directories(${PROJECT_NAME} PRIVATE ${SDL3_INCLUDE_DIRS}) 
+target_include_directories(${PROJECT_NAME} 
+  PRIVATE 
+    ${SDL3_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+) 
