@@ -1,8 +1,8 @@
-# windows 
-```mkdir build && cd build && cmake .. && cmake --build .```
+# create build folder 
+```mkdir build & cd build```
+# build 
+```cmake .. && cmake --build .```
 <br />
-optionally, you can append ```--config Release``` to hide console
-# linux
-```cmake build && cmake --build build```
+on windows, you can append ```--config Release``` to hide console
 <br />
-optionally, you can run in VSCODE with ```SDL_VIDEODRIVER=x11 build/ctest```
+```SDL_VIDEODRIVER=x11 ./ctest```
