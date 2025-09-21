@@ -1,25 +1,40 @@
 #include "game.h"
+#include "constants.h"
+#include <SDL3_image/SDL_image.h>
+#include <iostream>
 
 Game::Game() {
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        SDL_Log("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        done = true;
-    }
-
-    // Create window and renderer
-    if (SDL_CreateWindowAndRenderer("sigma", 640, 480, NULL, &window, &renderer) < 0) {
+    bool success = SDL_CreateWindowAndRenderer(
+        WINDOW_TITLE, 
+        SCREEN_WIDTH * WINDOW_SCALEFACTOR, 
+        SCREEN_HEIGHT * WINDOW_SCALEFACTOR, 
+        NULL, &window, &renderer
+    );
+    if (!success) {
         SDL_Log("Window and renderer could not be created! SDL_Error: %s\n", SDL_GetError());
-        SDL_Quit();
         done = true;
     }
 
+    screen = SDL_CreateTexture(renderer, 
+        SDL_PIXELFORMAT_RGBA8888, 
+        SDL_TEXTUREACCESS_TARGET,
+        SCREEN_WIDTH, 
+        SCREEN_HEIGHT
+    );
+
+    texman.add(renderer, "john.png");
+
+    //draw on pixel perfect texture
+    SDL_SetRenderTarget(renderer, screen);
+    SDL_RenderClear(renderer);
+    SDL_RenderTexture(renderer, texman.textures.at(0), NULL, NULL);
+    //go back to screen boi
+    SDL_SetRenderTarget(renderer, NULL);
+    SDL_RenderTexture(renderer, screen, NULL, NULL);
     SDL_RenderPresent(renderer);
 
-    SDL_Event event;
     while (!done) {
-        handleEvents(&event);
+        handleEvents();
         update();
         draw();
     }
@@ -30,9 +45,10 @@ Game::Game() {
 
 }
 
-void Game::handleEvents(SDL_Event *event) {
-    while (SDL_PollEvent(event)){
-        if (event->type == SDL_EVENT_QUIT){
+void Game::handleEvents() {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)){
+        if (event.type == SDL_EVENT_QUIT){
             done = true;
         }
     }
