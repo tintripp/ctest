@@ -1,12 +1,15 @@
 #pragma once
 
-#include <vector>
+#include <map>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
 class TextureManager{
+private:
+    std::map<const char*, SDL_Texture*> textures;
+    SDL_Renderer *renderer;
 public:
-    std::vector<SDL_Texture*> textures;
-
-    bool add(SDL_Renderer *renderer, const char *file); //return success
+    SDL_Texture* operator[](const char *file) const;
+    void set(SDL_Renderer *renderer); 
+    bool add(const char *file); //return success
 };

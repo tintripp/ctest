@@ -21,13 +21,18 @@ Game::Game() {
         SCREEN_WIDTH, 
         SCREEN_HEIGHT
     );
-
-    texman.add(renderer, "john.png");
+    SDL_SetTextureScaleMode(screen, SDL_SCALEMODE_NEAREST);
+    
+    texman.set(renderer);
+    texman.add("john.png");
 
     //draw on pixel perfect texture
     SDL_SetRenderTarget(renderer, screen);
     SDL_RenderClear(renderer);
-    SDL_RenderTexture(renderer, texman.textures.at(0), NULL, NULL);
+    SDL_FRect dstRect;
+    dstRect.w = 16;
+    dstRect.h = 16;
+    SDL_RenderTexture(renderer, texman["john.png"], NULL, &dstRect);
     //go back to screen boi
     SDL_SetRenderTarget(renderer, NULL);
     SDL_RenderTexture(renderer, screen, NULL, NULL);
