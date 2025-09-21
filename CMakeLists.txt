@@ -4,7 +4,8 @@ project(ctest)
 set(SDL_STATIC ON)
 add_subdirectory(extern/SDL)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+
+add_executable(${PROJECT_NAME} src/main.cpp src/game.cpp)
 
 if (WIN32) 
   set_target_properties(${PROJECT_NAME} PROPERTIES
