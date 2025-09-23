@@ -1,11 +1,12 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.21)
 project(ctest)
 
-# set(SDL_STATIC ON)
-add_subdirectory(extern/SDL)
-add_subdirectory(extern/SDL_image)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
-file(GLOB_RECURSE SRC_FILES "src/*.cpp")
+file(GLOB_RECURSE SRC_FILES "src/*.c")
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 if (WIN32) 
@@ -14,24 +15,25 @@ if (WIN32)
   )
 endif()
 
-target_link_libraries(${PROJECT_NAME} 
-  PRIVATE SDL3_image::SDL3_image 
-  SDL3::SDL3
-)#-static)
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+  SDL2 
+  SDL2main
+  SDL2_image
+  SDL2_mixer
+  SDL2_ttf
+)
 
-target_include_directories(${PROJECT_NAME} 
-  PRIVATE 
-    ${SDL3_INCLUDE_DIRS}
-    ${SDL3_IMAGE_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-) 
+target_include_directories(${PROJECT_NAME} PRIVATE 
+  ${SDL2_INCLUDE_DIRS}
+  ${PROJECT_SOURCE_DIR}/include
+)
 
 add_custom_command(
-    TARGET ${PROJECT_NAME} 
-    POST_BUILD 
-    COMMAND 
-      ${CMAKE_COMMAND} -E copy_directory 
-      "${CMAKE_CURRENT_SOURCE_DIR}/res/"
-      "$<TARGET_FILE_DIR:${PROJECT_NAME}>/res/"
-    COMMENT "Copying resource file"
+  TARGET ${PROJECT_NAME} 
+  POST_BUILD 
+  COMMAND 
+    ${CMAKE_COMMAND} -E copy_directory 
+    "${CMAKE_CURRENT_SOURCE_DIR}/res/"
+    "$<TARGET_FILE_DIR:${PROJECT_NAME}>/res/"
+  COMMENT "Copying resource file"
 )

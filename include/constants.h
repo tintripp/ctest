@@ -1,8 +1,11 @@
 #pragma once
 
-const char *WINDOW_TITLE = "Hey";
+const int SCREEN_WIDTH = 320;
+const int SCREEN_HEIGHT = 240;
+const int TILE_SIZE = 16;
 
-constexpr int SCREEN_WIDTH = 320;
-constexpr int SCREEN_HEIGHT = 240;
+const int WINDOW_SCALE = 2;
+const char* WINDOW_TITLE = "Ctest";
 
-constexpr int WINDOW_SCALEFACTOR = 3;
+const int FPS = 30;
+const int FRAME_TARGET_TIME = (1000 / FPS);
