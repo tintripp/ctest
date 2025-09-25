@@ -70,16 +70,43 @@ void handleEvents(GameContext* ctx) {
 void update(GameContext* ctx, float deltaTime) {
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
-        printf("%f\n",ctx->player.yVelocity);
-
     ctx->player.yVelocity += 300 * deltaTime;
 
 
+    ctx->player.xVelocity = 0;
     if (state[SDL_SCANCODE_D]) {
-        ctx->player.hitbox.x += 100 * deltaTime;
+        ctx->player.xVelocity = 100;
     }
     if (state[SDL_SCANCODE_A]) {
-        ctx->player.hitbox.x -= 100 * deltaTime;
+        ctx->player.xVelocity = -100;
+    }
+    ctx->player.hitbox.x += ctx->player.xVelocity * deltaTime;
+    for (int tRow = 0; tRow < LEVEL_HEIGHT; tRow ++) {
+
+        for (int tCol = 0; tCol < LEVEL_WIDTH; tCol ++) {
+
+            if (ctx->levelTiles[tCol][tRow].id == 1) { // 1=solid/existing for now
+                SDL_FRect tileRect = {
+                    tCol*TILE_SIZE,
+                    tRow*TILE_SIZE,
+                    TILE_SIZE,TILE_SIZE
+                };
+
+                if (SDL_HasIntersectionF(
+                    &ctx->player.hitbox, 
+                    &tileRect
+                )){
+                    if ((tileRect.x-ctx->player.hitbox.x) > 0) {
+                        ctx->player.hitbox.x = tileRect.x - ctx->player.hitbox.w;
+                    } else{
+                        ctx->player.hitbox.x = tileRect.x + tileRect.w;
+                    }
+                    ctx->player.xVelocity = 0;
+                }
+            }
+            
+        }
+
     }
 
     ctx->player.hitbox.y += ctx->player.yVelocity * deltaTime;
